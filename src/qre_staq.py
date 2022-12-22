@@ -202,6 +202,7 @@ def compute_t_layers(lattice_surgery_output):
     if t_layers is not None:
         for layer in t_layers:
             t_counts.append(len(layer))
+
     return {"n_qubits": n_qubits, "T-depth": len(t_counts),
             "T-count": sum(t_counts), "T-count/layer": t_counts}
 
