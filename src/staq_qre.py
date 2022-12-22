@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-
+import argparse
 import json
 import numpy as np
 import sys
@@ -218,12 +218,26 @@ def qre(lattice_surgery_output, config):
     return overheads
 
 
-if __name__ == '__main__':
-    lattice_surgery_file = "10000steps.json"
-    config_file = "config_fast.json"
+# Initialize parser
+parser = argparse.ArgumentParser(description='Resource estimator')
 
-    with open(lattice_surgery_file) as f_lattice_surgery, open(config_file) as f_config:
-        lattice_surgery_json = json.loads(f_lattice_surgery.read())
+# Adding required arguments
+parser.add_argument("-f", "--file", help="Reads from file (by default reads from stdin)")
+parser.add_argument("-c", "--config", required=True,
+                    help="QECC physical parameters configuration")
+
+# Read arguments from command line
+args = parser.parse_args()
+
+if __name__ == '__main__':
+    lattice_surgery_json = {}
+    if args.file:
+        with open(args.file) as f:
+            lattice_surgery_json = json.loads(f.read())
+    else:
+        lattice_surgery_json = json.load(sys.stdin)
+
+    with open(args.config) as f_config:
         config_json = json.loads(f_config.read())
 
     result = qre(lattice_surgery_json, config_json)
