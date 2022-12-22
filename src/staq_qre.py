@@ -115,15 +115,15 @@ def overhead_d_func(scheme, num_logical_qubits, T_count):
         tiles = 1.5 * num_logical_qubits + 3
         timesteps = 9 * T_count
 
-    overhead_d = {"space(d^2)": tiles, "time(d)": timesteps,
-                  "spacetime(d^3)": tiles * timesteps}
+    overhead_d = {"space (d^2)": tiles, "time (d)": timesteps,
+                  "spacetime (d^3)": tiles * timesteps}
 
     return overhead_d
 
 
 def overhead_phys_func(overhead_d, p_phys, t_cycle):
-    tiles = overhead_d["space(d^2)"]
-    timesteps = overhead_d["time(d)"]
+    tiles = overhead_d["space (d^2)"]
+    timesteps = overhead_d["time (d)"]
 
     d = 1
     while tiles * timesteps * 0.1 * (100 * p_phys) ** ((d + 1) / 2) > 0.01:
@@ -132,8 +132,8 @@ def overhead_phys_func(overhead_d, p_phys, t_cycle):
     qubits = tiles * 2 * d ** 2
     time = timesteps * t_cycle * d
 
-    overhead_phys = {"space(physical qubits)": qubits, "time(sec)": time,
-                     "spacetime(qubitsecs)": qubits * time,
+    overhead_phys = {"space (physical qubits)": qubits, "time (sec)": time,
+                     "spacetime (qubitsecs)": qubits * time,
                      "distance_used": d}
 
     return overhead_phys
@@ -176,17 +176,17 @@ def overheads_func(scheme, num_logical_qubits, T_count, p_phys, t_cycle):
 
     overheads = {
         "physical qubits": int(
-            overhead_phys['space(physical qubits)'] + best_factory[
+            overhead_phys['space (physical qubits)'] + best_factory[
                 'Qubits'] * num_facs),
-        # "time(sec)": overhead_phys['time(sec)'],
-        # "time(min)": overhead_phys['time(sec)']/60,
-        "time(hours)": overhead_phys['time(sec)'] / 3600,
-        # "time(days)": overhead_phys['time(sec)']/(24*3600),
-        # "time(months)": overhead_phys['time(sec)']/(24*3600*30),
-        # "time(years)": overhead_phys['time(sec)']/(24*3600*30*12),
+        # "time (sec)": overhead_phys['time (sec)'],
+        # "time (min)": overhead_phys['time (sec)']/60,
+        "time (hours)": overhead_phys['time (sec)'] / 3600,
+        # "time (days)": overhead_phys['time (sec)']/(24*3600),
+        # "time (months)": overhead_phys['time (sec)']/(24*3600*30),
+        # "time (years)": overhead_phys['time (sec)']/(24*3600*30*12),
         "distance used": overhead_phys["distance_used"],
         "fraction factories": np.round((best_factory['Qubits'] * num_facs) / (
-                overhead_phys['space(physical qubits)'] + best_factory[
+                overhead_phys['space (physical qubits)'] + best_factory[
             'Qubits'] * num_facs), 2),
         "number of factories": num_facs,
         "factory used": best_factory
