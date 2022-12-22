@@ -1,6 +1,10 @@
 # qre - quantum resource estimator
 
-Usage:
+### Pre-requisites
+- Python 3
+- staq (https://github.com/softwareqinc/staq)
+
+### Usage:
 
 ``` bash
 cd src
