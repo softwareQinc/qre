@@ -11,92 +11,93 @@ import sys
 factory_1 = {
     "p_phys": 1e-4,
     "p_out": 4.4 * 1e-8,
-    "Qubits": 810,
-    "Cycles": 18.1
+    "qubits": 810,
+    "cycles": 18.1
 }
 
 factory_2 = {
     "p_phys": 1e-4,
     "p_out": 9.3 * 1e-10,
-    "Qubits": 1150,
-    "Cycles": 18.1
+    "qubits": 1150,
+    "cycles": 18.1
 }
 
 factory_3 = {
     "p_phys": 1e-4,
     "p_out": 1.9 * 1e-11,
-    "Qubits": 2070,
-    "Cycles": 30.0
+    "qubits": 2070,
+    "cycles": 30.0
 }
 
 factory_4 = {
     "p_phys": 1e-4,
     "p_out": 2.4 * 1e-15,
-    "Qubits": 16400,
-    "Cycles": 90.3
+    "qubits": 16400,
+    "cycles": 90.3
 }
 
 factory_5 = {
     "p_phys": 1e-4,
     "p_out": 6.3 * 1e-25,
-    "Qubits": 18600,
-    "Cycles": 67.8
+    "qubits": 18600,
+    "cycles": 67.8
 }
 
 factory_6 = {
     "p_phys": 1e-3,
     "p_out": 4.5 * 1e-8,
-    "Qubits": 4620,
-    "Cycles": 42.6
+    "qubits": 4620,
+    "cycles": 42.6
 }
 
 factory_7 = {
     "p_phys": 1e-3,
     "p_out": 1.4 * 1e-10,
-    "Qubits": 43300,
-    "Cycles": 130
+    "qubits": 43300,
+    "cycles": 130
 }
 
 factory_8 = {
     "p_phys": 1e-3,
     "p_out": 2.6 * 1e-11,
-    "Qubits": 46800,
-    "Cycles": 157
+    "qubits": 46800,
+    "cycles": 157
 }
 
 factory_9 = {
     "p_phys": 1e-3,
     "p_out": 2.7 * 1e-12,
-    "Qubits": 30700,
-    "Cycles": 82.5
+    "qubits": 30700,
+    "cycles": 82.5
 }
 
 factory_10 = {
     "p_phys": 1e-3,
     "p_out": 3.3 * 1e-14,
-    "Qubits": 39100,
-    "Cycles": 97.5
+    "qubits": 39100,
+    "cycles": 97.5
 }
 
 factory_11 = {
     "p_phys": 1e-3,
     "p_out": 4.5 * 1e-20,
-    "Qubits": 73400,
-    "Cycles": 128
+    "qubits": 73400,
+    "cycles": 128
 }
 
 factory_12 = {
     "p_phys": 1e-4,
+
     "p_out": 1.5 * 1e-9,
-    "Qubits": 762,
-    "Cycles": 36.2
+    "qubits": 762,
+    "cycles": 36.2
 }
 
 factory_13 = {
     "p_phys": 1e-3,
     "p_out": 6.1 * 1e-10,
-    "Qubits": 7780,
-    "Cycles": 469
+    "qubits": 7780,
+    "cycles": 469
 }
 
 factories = [factory_1, factory_2, factory_3, factory_4, factory_5, factory_6,
@@ -149,15 +150,15 @@ def best_factory_func(p_phys, T_count, d, scheme):
         rate = 1
 
     # this is hacky
-    best_factory = {"Qubits": 1e20}
+    best_factory = {"qubits": 1e20}
 
     num_facs = 1
-    while best_factory["Qubits"] == 1e20:
+    while best_factory["qubits"] == 1e20:
         for factory in factories:
             if factory["p_phys"] == p_phys:
                 if factory['p_out'] * T_count < 0.01:
-                    if (factory['Cycles'] / d) / num_facs < rate:
-                        if factory['Qubits'] < best_factory['Qubits']:
+                    if (factory['cycles'] / d) / num_facs < rate:
+                        if factory['qubits'] < best_factory['qubits']:
                             best_factory = factory
 
         num_facs = num_facs + 1
@@ -170,24 +171,21 @@ def best_factory_func(p_phys, T_count, d, scheme):
 def overheads_func(scheme, num_logical_qubits, T_count, p_phys, t_cycle):
     overhead_d = overhead_d_func(scheme, num_logical_qubits, T_count)
     overhead_phys = overhead_phys_func(overhead_d, p_phys, t_cycle)
-    best_factory, num_facs = best_factory_func(p_phys, T_count,
-                                               overhead_phys["distance_used"],
-                                               scheme)
+    best_factory, num_facs = best_factory_func(p_phys, T_count, overhead_phys["distance_used"], scheme)
 
     overheads = {
         "physical qubits": int(
             overhead_phys['space (physical qubits)'] + best_factory[
-                'Qubits'] * num_facs),
-        # "time (sec)": overhead_phys['time (sec)'],
-        # "time (min)": overhead_phys['time (sec)']/60,
+                'qubits'] * num_facs),
+        "time (sec)": overhead_phys['time (sec)'],
+        "time (min)": overhead_phys['time (sec)'] / 60,
         "time (hours)": overhead_phys['time (sec)'] / 3600,
-        # "time (days)": overhead_phys['time (sec)']/(24*3600),
-        # "time (months)": overhead_phys['time (sec)']/(24*3600*30),
-        # "time (years)": overhead_phys['time (sec)']/(24*3600*30*12),
+        "time (days)": overhead_phys['time (sec)'] / (24 * 3600),
+        "time (months)": overhead_phys['time (sec)'] / (24 * 3600 * 30),
+        "time (years)": overhead_phys['time (sec)'] / (24 * 3600 * 30 * 12),
         "distance used": overhead_phys["distance_used"],
-        "fraction factories": np.round((best_factory['Qubits'] * num_facs) / (
-                overhead_phys['space (physical qubits)'] + best_factory[
-            'Qubits'] * num_facs), 2),
+        "fraction factories": np.round((best_factory['qubits'] * num_facs) / (
+                overhead_phys['space (physical qubits)'] + best_factory['qubits'] * num_facs), 2),
         "number of factories": num_facs,
         "factory used": best_factory
     }
@@ -196,6 +194,11 @@ def overheads_func(scheme, num_logical_qubits, T_count, p_phys, t_cycle):
 
 
 def compute_t_layers(lattice_surgery_output):
+    circuit = lattice_surgery_output['3. Circuit after T depth reduction']
+    if circuit is None:
+        print("Error: Circuit after T depth reduction: null, exiting...", file=sys.stderr)
+        sys.exit(-1)
+
     n_qubits = int(lattice_surgery_output['3. Circuit after T depth reduction']['n'])
     t_layers = lattice_surgery_output['3. Circuit after T depth reduction']['T layers']
     t_counts = []
@@ -203,7 +206,7 @@ def compute_t_layers(lattice_surgery_output):
         for layer in t_layers:
             t_counts.append(len(layer))
 
-    return {"n_qubits": n_qubits, "T-depth": len(t_counts),
+    return {"n_qubits": n_qubits, "Commuting T-layers": len(t_counts),
             "T-count": sum(t_counts), "T-count/layer": t_counts}
 
 
@@ -212,19 +215,21 @@ def qre(lattice_surgery_output, config):
     n_qubits = t_layers["n_qubits"]
     t_counts = t_layers["T-count/layer"]
     t_count = sum(t_counts)
-    t_depth = len(t_counts)
+    commuting_t_layers_no = len(t_counts)
+    logical_circuit = {"n_qubits": n_qubits, "T-count": t_count, "Commuting T-layers": commuting_t_layers_no}
+    # logical_circuit["T-count/layer"] = t_layers["T-count/layer"]
     overheads = overheads_func(config["scheme"], n_qubits, t_count, config["p_g"], config["cycle_time"])
 
-    return overheads
+    return logical_circuit, overheads
 
 
 # Initialize parser
-parser = argparse.ArgumentParser(description='Resource estimator')
+parser = argparse.ArgumentParser(description='Quantum resource estimator',
+                                 epilog='(c) 2023 softwareQ Inc. All rights reserved.')
 
 # Adding required arguments
 parser.add_argument("-f", "--file", help="Reads from file (by default reads from stdin)")
-parser.add_argument("-c", "--config", required=True,
-                    help="QECC physical parameters configuration")
+parser.add_argument("-c", "--config", help="QECC physical parameters configuration (by default, uses a fast scheme)")
 
 # Read arguments from command line
 args = parser.parse_args()
@@ -237,10 +242,18 @@ if __name__ == '__main__':
     else:
         lattice_surgery_json = json.load(sys.stdin)
 
-    with open(args.config) as f_config:
-        config_json = json.loads(f_config.read())
+    default_scheme = {
+        "scheme": "fast",
+        "p_g": 1e-3,
+        "cycle_time": 1e-6
+    }
+    if args.config:
+        with open(args.config) as f_config:
+            config_json = json.loads(f_config.read())
+    else:
+        config_json = default_scheme
 
-    result = qre(lattice_surgery_json, config_json)
+    logical, physical = qre(lattice_surgery_json, config_json)
 
-    print(json.dumps(config_json, indent=4))
-    print(json.dumps(result, indent=4))
+    final_result = {"logical": logical, "qecc": config_json, "physical": physical}
+    print(json.dumps(final_result, indent=4))
