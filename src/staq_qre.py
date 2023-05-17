@@ -140,7 +140,7 @@ def overhead_phys_func(overhead_d, p_phys, t_cycle):
     return overhead_phys
 
 
-# Function to determine best MSD factory
+# Function to determine the best MSD factory
 
 def best_factory_func(p_phys, T_count, d, scheme):
     if scheme == "compact":
@@ -194,13 +194,14 @@ def overheads_func(scheme, num_logical_qubits, T_count, p_phys, t_cycle):
 
 
 def compute_t_layers(lattice_surgery_output):
-    circuit = lattice_surgery_output['3. Circuit after T depth reduction']
+    third = '3. T-layered circuit'
+    circuit = lattice_surgery_output[third]
     if circuit is None:
-        print("Error: Circuit after T depth reduction: null, exiting...", file=sys.stderr)
+        print("Error: Circuit is null, exiting...", file=sys.stderr)
         sys.exit(-1)
 
-    n_qubits = int(lattice_surgery_output['3. Circuit after T depth reduction']['n'])
-    t_layers = lattice_surgery_output['3. Circuit after T depth reduction']['T layers']
+    n_qubits = int(lattice_surgery_output[third]['n'])
+    t_layers = lattice_surgery_output[third]['T layers']
     t_counts = []
     if t_layers is not None:
         for layer in t_layers:
