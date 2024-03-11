@@ -6,8 +6,8 @@ import sys
 
 # Initialize parser
 parser = argparse.ArgumentParser(
-    description='Takes as input a JSON file file produced by staq_lattice_surgery and outputs the list of T-counts '
-                'for each layer of commuting pi/8 rotations')
+    description='Takes as input a JSON file produced by staq_lattice_surgery and outputs the list of T-counts for '
+                'each layer of commuting pi/8 rotations')
 
 # Adding optional arguments
 parser.add_argument("-f", "--file", help="Reads from file (by default reads from stdin)")
